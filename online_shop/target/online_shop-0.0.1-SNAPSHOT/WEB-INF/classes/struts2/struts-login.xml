@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE struts PUBLIC
+		"-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+		"http://struts.apache.org/dtds/struts-2.0.dtd">
+<struts>
+<constant value="false" name="struts.devMode"/>
+<!-- 国际化资源文件名称 -->
+<constant value="i18n" name="struts.custom.i18n.resources"/>
+<!-- 是否自动加载国际化资源文件 -->
+<constant value="false" name="struts.i18n.reload"/>
+<!-- convention类重新加载 -->
+<constant value="false" name="struts.convention.classes.reload"/>
+<!-- 浏览器是否缓存静态内容 -->
+<constant value="true" name="struts.serve.static.browserCache"/>
+<!-- 配置使用Spring管理Action <constant name="struts.objectFactory" value="spring" /> -->
+
+<!-- 上传文件大小限制设置 -->
+<constant value="-1" name="struts.multipart.maxSize"/><constant value="true" name="struts.ognl.allowStaticMethodAccess"/>
+<!-- 主题 -->
+<constant value="simple" name="struts.ui.theme"/>
+<!-- 编码 -->
+<constant value="UTF-8" name="struts.i18n.encoding"/>
+<!-- 后缀 -->
+<constant value="action" name="struts.action.extension"/>
+<!-- 结果资源的路径 -->
+<constant value="/template/" name="struts.convention.result.path"/>
+<!-- URL资源分隔符 -->
+<!-- <constant value="_" name="struts.convention.action.name.separator"/> -->
+  
+<package name="login" namespace="/" extends="json-default">
+		<action name="loginftl*" class="LoginAction" method="{0}">
+			<result name="success" type="freemarker">/ftl/{0}.ftl</result>
+		</action>
+		<action name="loginjson*" class="LoginAction" method="{0}">
+			<result name="success" type="json">
+				<param name="root">result</param>
+			</result>
+		</action>
+		<action name="game" class="LoginAction" method="loginftlPage">
+			<result name="success" >/bin/webgame.exe</result>
+		</action>
+		<action name="editUserftl*" class="EditUserAction" method="{0}">
+			<result name="success" type="freemarker">/ftl/{0}.ftl</result>
+		</action>
+		<action name="editUserjson*" class="EditUserAction" method="{0}">
+			<result name="success" type="json">
+				<param name="root">result</param>
+			</result>
+		</action>
+		
+		<action name="userCenterftl*" class="UserCenterAction" method="{0}">
+			<result name="success" type="freemarker">/ftl/{0}.ftl</result>
+		</action>
+		<action name="userCenterjson*" class="UserCenterAction" method="{0}">
+			<result name="success" type="json">
+				<param name="root">result</param>
+			</result>
+		</action>
+		
+		<action name="searchAddress" class="AddressAction" method="searchAddress">
+			<result name="success" type="json">
+            	<param name="root">result</param>
+            </result>
+		</action>
+		<action name="deleteUserInfo" class="EditUserAction" method="deleteUserInfo">
+			<result name="success" type="json">
+            	<param name="root">result</param>
+            </result>
+		</action>
+		<action name="insertUserInfo" class="EditUserAction" method="insertUserInfo">
+			<result name="success" type="json">
+            	<param name="root">result</param>
+            </result>
+		</action>
+		<action name="updateUserInfo" class="EditUserAction" method="updateUserInfo">
+			<result name="success" type="json">
+            	<param name="root">result</param>
+            </result>
+		</action>
+		<action name="queryByUserName" class="EditUserAction" method="queryByUserName">
+			<result name="success" type="json">
+				<param name="root">result</param>
+			</result>
+		</action>
+</package>
+ 
+  
+</struts> 					

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE struts PUBLIC
+		"-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+		"http://struts.apache.org/dtds/struts-2.0.dtd">
+<struts>
+<constant value="false" name="struts.devMode"/>
+<!-- 国际化资源文件名称 -->
+<constant value="i18n" name="struts.custom.i18n.resources"/>
+<!-- 是否自动加载国际化资源文件 -->
+<constant value="false" name="struts.i18n.reload"/>
+<!-- convention类重新加载 -->
+<constant value="false" name="struts.convention.classes.reload"/>
+<!-- 浏览器是否缓存静态内容 -->
+<constant value="true" name="struts.serve.static.browserCache"/>
+<!-- 配置使用Spring管理Action <constant name="struts.objectFactory" value="spring" /> -->
+
+<!-- 上传文件大小限制设置 -->
+<constant value="-1" name="struts.multipart.maxSize"/><constant value="true" name="struts.ognl.allowStaticMethodAccess"/>
+<!-- 主题 -->
+<constant value="simple" name="struts.ui.theme"/>
+<!-- 编码 -->
+<constant value="UTF-8" name="struts.i18n.encoding"/>
+<!-- 后缀 -->
+<constant value="action" name="struts.action.extension"/>
+<!-- 结果资源的路径 -->
+<constant value="/template/" name="struts.convention.result.path"/>
+<!-- URL资源分隔符 -->
+<!-- <constant value="_" name="struts.convention.action.name.separator"/> -->
+  
+<package name="product" namespace="/" extends="json-default">
+		<action name="productftl*" class="ProductAction" method="{0}">
+			<result name="success" type="freemarker">/ftl/{0}.ftl</result>
+		</action>
+		<action name="productjson*" class="ProductAction" method="{0}">
+			<result name="success" type="json">
+				<param name="root">result</param>
+			</result>
+		</action>
+		<action name="imgftlPage" class="UploadAction" method="imgftlPage">
+			<result name="success" type="freemarker">/ftl/imgftlPage.ftl</result>
+		</action>
+		<action name="uploadimg" class="UploadAction" method="upload">  
+        <!-- 配置fileUpload的拦截器 -->  
+        	<interceptor-ref name="fileUpload">  
+        	<!-- 配置允许上传的文件类型 -->  
+                <param name="allowedTypes">  
+                     image/bmp,image/png,image/gif,image/jpeg,image/jpg,application/msword,text/plain  
+                </param>  
+             <!-- 配置允许上传的文件大小 -->  
+             <param name="maximumSize">2000000000</param>  
+                </interceptor-ref>  
+                <interceptor-ref name="defaultStack" />  
+                <!-- 动态设置Action的属性值 -->  
+            <result name="success" type="freemarker">/ftl/productftlPage.ftl</result>
+         </action>  
+	
+</package>
+ 
+</struts> 					

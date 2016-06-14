@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap>
+
+  <typeAlias alias="OderProductModel" type="com.czq.shop.model.OderProductModel"/>
+  <typeAlias alias="OrderFormModel" type="com.czq.shop.model.OrderFormModel"/>
+  <typeAlias alias="ProductSearch" type="com.czq.shop.model.ProductSearchModel"/>
+  	
+  	<select id="findOrderFormId"  resultClass="OrderFormModel" >
+	   select Max(orderid) orderId
+	   from order_form
+  	</select>
+  	
+  	<select id="queryOderProductById"  resultClass="OderProductModel" parameterClass="ProductSearch">
+	   select orderid orderId,productid productId, transactionprice transactionPrice,number number
+  	   from oder_product
+  	   where orderid=#productId#;
+  	</select>
+  
+  	<insert id="insertOderProduct" parameterClass="OderProductModel" >
+  		insert
+  		into oder_product(orderid,productid,transactionprice,number)
+  		values(#orderId#,#productId#,#transactionPrice#,#number#);
+  	</insert>
+  
+    <select id="queryOrderFormById"  resultClass="OrderFormModel" parameterClass="ProductSearch">
+  	   select orderid orderId,status status,merchant merchant,username userName,ordertime orderTime,address address,delivertime deliverTime,receipttime receiptTime,gettime getTime,paytime payTime,xpresscompany xpressCompany,xpressnumber xpressNumber,totalprice totalPrice
+  	   from order_form
+  	   <dynamic prepend="where">
+			 <isNotEmpty prepend="and" property="userName">
+				username=#userName#
+			</isNotEmpty>
+			 <isNotEmpty prepend="and" property="merchant">
+				merchant=#merchant#
+			</isNotEmpty>
+			<isNotEqual prepend="and" property="productId" compareValue = "0">
+				orderid=#productId#
+			</isNotEqual>
+  	   </dynamic>
+  	   order by orderTime desc
+  	</select>
+  	
+ 
+  	<insert id="insertOrderForm" parameterClass="OrderFormModel" >
+  		insert
+  		into order_form(orderid,merchant,username,ordertime,address,totalprice)
+  		values(#orderId#,#merchant#,#userName#,NOW(),#address#,#totalPrice#);
+  	</insert>
+  	
+  	<update id="updateDeliverTimeById" parameterClass="OrderFormModel" >
+  		update order_form
+  		set deliverTime=NOW(),xpresscompany=#xpressCompany#,xpressnumber=#xpressNumber#,status=2
+  		where orderid=#orderId#
+  	</update>
+  	
+  	<update id="updatePayTimeById" parameterClass="OrderFormModel" >
+  		update order_form
+  		set paytime=NOW(),status=1
+  		where orderid=#orderId#
+  	</update>
+  	
+  	<update id="updateReceiptTimeById" parameterClass="OrderFormModel" >
+  		update order_form
+  		set receipttime=NOW(),status=3
+  		where orderid=#orderId#
+  	</update>
+  	
+  	<update id="updateGetTimeById" parameterClass="OrderFormModel" >
+  		update order_form
+  		set gettime=NOW(),status=4
+  		where orderid=#orderId#
+  	</update>
+</sqlMap>

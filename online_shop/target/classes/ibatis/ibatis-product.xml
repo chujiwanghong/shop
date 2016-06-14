@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap>
+
+  <typeAlias alias="EvaluateModel" type="com.czq.shop.model.EvaluateModel"/>
+  <typeAlias alias="ProductModel" type="com.czq.shop.model.ProductModel"/>
+  <typeAlias alias="ProductSearch" type="com.czq.shop.model.ProductSearchModel"/>
+  <typeAlias alias="CategoryModel" type="com.czq.shop.model.CategoryModel"/>
+  	
+  	<update id="updateSaleById" parameterClass="ProductModel">
+     	update product_info
+     	set inventorynum=#inventoryNum#,salenum=#saleNum#
+     	where productid=#productId#
+  	</update>
+  	
+  	
+  	<select id="findBigProductId"  resultClass="ProductModel" >
+	   select Max(productid) productId
+	   from product_info
+  	</select>
+  	
+  	<select id="queryHotProductById"  resultClass="ProductModel" parameterClass="ProductSearch">
+	   select productid productId,merchantname merchantName, productname productName,producttype productType,productprice productPrice,discountprice discountPrice,indexpictuer indexPictuer,inventorynum inventoryNum,salenum saleNum,simpledescribe simpleDescribe,updatetime updateTime
+  	   from product_info
+  	   <dynamic prepend="where">
+			<isNotEqual prepend="and" property="productId" compareValue = "0">
+				producttype=#productId#
+			</isNotEqual>
+  	   </dynamic>
+  	   order by salenum DESC
+  	</select>
+
+    <select id="queryProductById"  resultClass="ProductModel" parameterClass="ProductSearch">
+  	   select productid productId,merchantname merchantName, productname productName,producttype productType,productprice productPrice,discountprice discountPrice,indexpictuer indexPictuer,inventorynum inventoryNum,salenum saleNum,simpledescribe simpleDescribe,updatetime updateTime
+  	   from product_info
+  	   <dynamic prepend="where">
+			 <isNotEmpty prepend="and" property="userName">
+				merchantname=#userName#
+			</isNotEmpty>
+			<isNotEqual prepend="and" property="productId" compareValue = "0">
+				productid=#productId#
+			</isNotEqual>
+			<isNotEmpty prepend="and" property="productName">
+				productname like '%$productName$%'
+			</isNotEmpty>
+  	   </dynamic>
+  	</select>
+   <select id="queryDescribeByProductId"  resultClass="EvaluateModel" parameterClass="ProductSearch">
+  	   select productid productId,describeid describeId, describetype describeType,describecharacter describeCharacter,describeuser describeUser,updatetime updateTime,describepicture describePicture
+  	   from expression_evaluation
+  	   <dynamic prepend="where">
+			 <isNotEmpty prepend="and" property="userName">
+				describeuser=#userName#
+			</isNotEmpty>
+			<isNotEqual prepend="and" property="productId" compareValue = "0">
+				productid=#productId#
+			</isNotEqual>
+			<isNotEqual prepend="and" property="describeid" compareValue = "0">
+				describeid=#describeid#
+			</isNotEqual>
+  	   </dynamic>
+  	</select>
+  	
+  	<select id="queryCategoryById"  resultClass="CategoryModel" parameterClass="ProductSearch">
+  	   select categoryid categoryId,categoryen categoryEn, categoryname categoryName,updatetime updateTime
+  	   from category_info
+  	   <dynamic prepend="where">
+			 <isNotEmpty prepend="and" property="userName">
+				categoryname=#userName#
+			</isNotEmpty>
+			<isNotEqual prepend="and" property="productId" compareValue = "0">
+				categoryid=#productId#
+			</isNotEqual>
+  	   </dynamic>
+  	</select>
+  	
+  	
+  	<insert id="insertEvaluate" parameterClass="EvaluateModel" >
+  		insert
+  		into expression_evaluation(productid,describeid,describetype,updatetime,describecharacter,describeuser,describepicture)
+  		values(#productId#,#describeId#,#describeType#,NOW(),#describeCharacter#,#describeUser#,#describePicture#);
+  	</insert>
+  	
+  	<insert id="insertProduct" parameterClass="ProductModel" >
+  		insert
+  		into product_info(productid,merchantname, productname,producttype,updatetime,productprice,discountprice,indexpictuer,inventorynum,salenum,simpledescribe)
+  		values(#productId#,#merchantName#,#productName#,#productType#,NOW(),#productPrice#,#discountPrice#,#indexPictuer#,#inventoryNum#,#saleNum#,#simpleDescribe#);
+  	</insert>
+</sqlMap>

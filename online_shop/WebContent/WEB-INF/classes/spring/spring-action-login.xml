@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="
+			http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+			http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-2.5.xsd">
+
+	<bean id="LoginAction" class="com.czq.shop.action.LoginAction" scope="prototype">
+		<property name="userService" ref="userService"></property>
+	</bean>
+	<bean id="EditUserAction" class="com.czq.shop.action.EditUserAction" scope="prototype">
+		<property name="userService" ref="userService"></property>
+	</bean>
+	<bean id="AddressAction" class="com.czq.shop.action.AddressAction" scope="prototype">
+		<property name="addressService" ref="addressService"></property>
+	</bean>
+	<bean id="UploadAction" class="com.czq.shop.action.UploadAction" scope="prototype">
+		<property name="productService" ref="productService"></property>
+	</bean>
+	<bean id="UserCenterAction" class="com.czq.shop.action.UserCenterAction" scope="prototype">
+	</bean>
+	<bean id="ProductAction" class="com.czq.shop.action.ProductAction" scope="prototype">
+		<property name="productService" ref="productService"></property>
+	</bean>
+	<bean id="HomeAction" class="com.czq.shop.action.HomeAction" scope="prototype">
+		<property name="productService" ref="productService"></property>
+	</bean>
+	<bean id="OrderAction" class="com.czq.shop.action.OrderAction" scope="prototype">
+		<property name="orderService" ref="orderService"></property>
+		<property name="userService" ref="userService"></property>
+		<property name="productService" ref="productService"></property>
+	</bean>
+</beans>

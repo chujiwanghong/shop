@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap>
+
+  <typeAlias alias="editUserInfo" type="com.czq.shop.model.EditUser"/>
+  <typeAlias alias="AddressInfo" type="com.czq.shop.model.AddressInfo"/>
+  
+    <select id="queryByUserName"  resultClass="editUserInfo" parameterClass="java.lang.String">
+  	   select ID id, username userName,nickname nickName,password passWord,usertype userType,creatdate creatDate,useraddress userAddress,pagecategory pageCategory,userphone userPhone,QQ QQ, reservedinformation reservedInformation
+  	   from user_info
+  	   <dynamic prepend="where">
+			<isNotEmpty>
+				username=#userName#
+				and isdelete = 0;
+			</isNotEmpty>
+			<isEmpty>
+				 isdelete = 0;
+			</isEmpty>
+  	   </dynamic>
+  	</select>
+ 	<select id="findAddressById"  resultClass="AddressInfo" parameterClass="int">
+  	   select ID id, UPID upid,NAME name,LEVEL level
+  	   from gk_diqu
+  	   where upid=#upId#;
+  	</select>
+  	<delete id="deleteUserInfo" parameterClass="String" >
+  		delete 
+  		from user_info
+  		where username=#userName#;
+  	</delete>
+  	
+  	<insert id="insertUserInfo" parameterClass="editUserInfo" >
+  		replace
+  		into user_info(username,password,nickname,creatdate,useraddress,userphone,QQ,reservedinformation)
+  		values(#userName#,#passWord#,#nickName#,NOW(),#userAddress#,#userPhone#,#QQ#,#reservedInformation#);
+  	</insert>
+
+</sqlMap>

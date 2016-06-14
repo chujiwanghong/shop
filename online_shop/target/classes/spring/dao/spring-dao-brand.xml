@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+  - Application context definition for JPetStore's business layer.
+  - Contains bean references to the transaction manager and to the DAOs in
+  - dataAccessContext-local/jta.xml (see web.xml's "contextConfigLocation").
+  -->
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="
+			http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+			http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.5.xsd
+			http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.5.xsd">
+
+    <!-- 配置数据源 -->
+        <!-- 配置数据源 -->
+    <bean id="onlineshop" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+        <property name="driverClassName" value="com.mysql.jdbc.Driver"/>
+        <property name="url" value="jdbc:mysql://localhost:3306/online_shop"/>
+        <property name="username" value="root"/>
+        <property name="password" value="cyj2QQ"/>
+    </bean>
+
+    <!--根据dataSource和configLocation创建一个SqlMapClient-->
+    <bean id="sqlMapClient"
+          class="org.springframework.orm.ibatis.SqlMapClientFactoryBean">
+        <property name="configLocation">
+            <value>classpath:/ibatis-config.xml</value>
+        </property>
+        <property name="dataSource">
+            <ref bean="onlineshop"/>
+        </property>
+    </bean>
+	<bean id="editUser" class="com.czq.shop.dao.UserDaoImpl">
+		<property name="sqlMapClient" ref="sqlMapClient"/>		
+	</bean>
+	
+	<bean id="userService" class="com.czq.shop.service.UserServiceImpl">
+		<property name="editUser" ref="editUser"/>
+	</bean>
+	    <!--初始化user对象-->
+   
+    
+    <bean id="address" class="com.czq.shop.dao.AddressDao">
+		<property name="sqlMapClient" ref="sqlMapClient"/>		
+	</bean>
+	
+	<bean id="addressService" class="com.czq.shop.service.AddressService">
+		<property name="address" ref="address"/>
+	</bean>
+	  
+	<bean id="productDao" class="com.czq.shop.dao.ProductDao">
+		<property name="sqlMapClient" ref="sqlMapClient"/>		
+	</bean>
+	
+	<bean id="productService" class="com.czq.shop.service.ProductService">
+		<property name="productDao" ref="productDao"/>
+	</bean>  
+	  
+	<bean id="orderDao" class="com.czq.shop.dao.OrderDao">
+		<property name="sqlMapClient" ref="sqlMapClient"/>		
+	</bean>
+	
+	<bean id="orderService" class="com.czq.shop.service.OrderService">
+		<property name="orderDao" ref="orderDao"/>
+	</bean>    
+    
+</beans>
